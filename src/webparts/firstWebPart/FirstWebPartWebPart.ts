@@ -14,6 +14,7 @@ import { IFirstWebPartProps } from './components/IFirstWebPartProps';
 
 export interface IFirstWebPartWebPartProps {
   description: string;
+  list: string;
 }
 
 export default class FirstWebPartWebPart extends BaseClientSideWebPart<IFirstWebPartWebPartProps> {
@@ -31,6 +32,8 @@ export default class FirstWebPartWebPart extends BaseClientSideWebPart<IFirstWeb
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
         userDisplayName: this.context.pageContext.user.displayName,
         context: this.context
+      
+      
       }
     );
 
@@ -111,7 +114,9 @@ export default class FirstWebPartWebPart extends BaseClientSideWebPart<IFirstWeb
               groupFields: [
                 PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
-                })
+                }),
+
+               
               ]
             }
           ]

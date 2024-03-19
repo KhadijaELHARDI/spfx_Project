@@ -6,5 +6,6 @@ export interface IFirstWebPartProps {
   environmentMessage: string;
   hasTeamsContext: boolean;
   userDisplayName: string;
-  context:WebPartContext
+  context:WebPartContext;
+  
 }

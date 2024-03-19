@@ -17,15 +17,15 @@ const Std = (props:IFirstWebPartProps) =>{
   const getSTDItems = async () => {
     //console.log('context',_sp)
      const items = _sp.web.lists.getByTitle(LIST_NAME).items();
-    // console.log('STD Items',items)
+    console.log('STD Items',items)
 
      setStds((await items).map((item:any) => {
       return {
         Id: item.Id,
         Title:item.Title,
-        Name:item.Name,
-        Cycle:item.Cycle,
-        Age:item.Age
+        Name:item.name,
+        Cycle:item.cycle,
+        Age:item.age
       }
      }));
 
@@ -41,14 +41,40 @@ const Std = (props:IFirstWebPartProps) =>{
   
 
   React.useEffect(() => {
-    getSTDItems();
+   
+      getSTDItems();
+    
+    
     //test();
 
   },[])
   return (
     <>
     <h1>Hello World</h1>
-    <pre>{JSON.stringify(stds,null,5)}</pre>
+ 
+   <table>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Name</th>
+            <th>Cycle</th>
+            <th>Age</th>
+          </tr>
+        </thead>
+        <tbody>
+          {stds.map((std) => (
+            <tr key={std.Id}>
+              <td>{std.Id}</td>
+              <td>{std.Title}</td>
+              <td>{std.Name}</td>
+              <td>{std.Cycle}</td>
+              <td>{std.Age}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
     </>
   )
 
