@@ -1,43 +1,29 @@
 import * as React from 'react';
-import styles from './SecondWebPart.module.scss';
-import type { ISecondWebPartProps } from './ISecondWebPartProps';
-import { escape } from '@microsoft/sp-lodash-subset';
+import { SPHttpClient} from '@microsoft/sp-http';
+import { DefaultButton, Stack } from '@fluentui/react';
+import GroupManagement from '../components/GroupManagementComponent'; // Importez le composant GroupManagement
 
-export default class SecondWebPart extends React.Component<ISecondWebPartProps, {}> {
-  public render(): React.ReactElement<ISecondWebPartProps> {
-    const {
-      description,
-      isDarkTheme,
-      environmentMessage,
-      hasTeamsContext,
-      userDisplayName
-    } = this.props;
 
-    return (
-      <section className={`${styles.secondWebPart} ${hasTeamsContext ? styles.teams : ''}`}>
-        <div className={styles.welcome}>
-          <img alt="" src={isDarkTheme ? require('../assets/welcome-dark.png') : require('../assets/welcome-light.png')} className={styles.welcomeImage} />
-          <h2>Well done, {escape(userDisplayName)}!</h2>
-          <div>{environmentMessage}</div>
-          <div>Web part property value: <strong>{escape(description)}</strong></div>
-        </div>
-        <div>
-          <h3>Welcome to SharePoint Framework!</h3>
-          <p>
-            The SharePoint Framework (SPFx) is a extensibility model for Microsoft Viva, Microsoft Teams and SharePoint. It&#39;s the easiest way to extend Microsoft 365 with automatic Single Sign On, automatic hosting and industry standard tooling.
-          </p>
-          <h4>Learn more about SPFx development:</h4>
-          <ul className={styles.links}>
-            <li><a href="https://aka.ms/spfx" target="_blank" rel="noreferrer">SharePoint Framework Overview</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-graph" target="_blank" rel="noreferrer">Use Microsoft Graph in your solution</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-teams" target="_blank" rel="noreferrer">Build for Microsoft Teams using SharePoint Framework</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-viva" target="_blank" rel="noreferrer">Build for Microsoft Viva Connections using SharePoint Framework</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-store" target="_blank" rel="noreferrer">Publish SharePoint Framework applications to the marketplace</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-api" target="_blank" rel="noreferrer">SharePoint Framework API reference</a></li>
-            <li><a href="https://aka.ms/m365pnp" target="_blank" rel="noreferrer">Microsoft 365 Developer Community</a></li>
-          </ul>
-        </div>
-      </section>
-    );
-  }
+export interface ISecondWebPartProps {
+  spHttpClient: SPHttpClient;
 }
+
+const SecondWebPart: React.FC<ISecondWebPartProps> = ({ spHttpClient }) => {
+  const [showGroupManagement, setShowGroupManagement] = React.useState(false); // Ajoutez un état pour contrôler l'affichage du composant GroupManagement
+
+  const handleToggleGroupManagement = () => {
+    setShowGroupManagement(!showGroupManagement); // Inversez l'état pour afficher ou masquer le composant GroupManagement
+  };
+
+  return (
+    <div>
+      <h1>Ma Web Part</h1>
+      <Stack tokens={{ childrenGap: 10 }}>
+        <DefaultButton text="Gestion de groupe" onClick={handleToggleGroupManagement} /> {/* Ajoutez un bouton pour afficher ou masquer le composant GroupManagement */}
+      </Stack>
+      {showGroupManagement && <GroupManagement spHttpClient={spHttpClient} />} {/* Affichez le composant GroupManagement si showGroupManagement est true */}
+    </div>
+  );
+};
+
+export default SecondWebPart;
