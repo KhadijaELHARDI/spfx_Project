@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { SPFI } from '@pnp/sp';
 import { IFirstWebPartProps } from './IFirstWebPartProps';
-import { ISTUDENT } from '../../../interfaces';
+import { ISTUDENT } from '../../../model/interfaces';
 import { getSP } from '../../../pnpjsConfig';
 import { getStudents } from '../../../service/listService';
 import { useEffect, useState } from 'react';
@@ -60,9 +60,9 @@ const Std: React.FC<IFirstWebPartProps> = (props) => {
             <tr key={student.Id}>
               <td>{student.Id}</td>
               <td>{student.Title}</td>
-              <td>{student.Name}</td>
-              <td>{student.Cycle}</td>
-              <td>{student.Age}</td>
+              <td>{student.name}</td>
+              <td>{student.cycle}</td>
+              <td>{student.age}</td>
             </tr>
           ))}
         </tbody>
