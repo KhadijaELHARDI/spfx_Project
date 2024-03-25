@@ -14,4 +14,4 @@ export const getSP = (context?: WebPartContext): SPFI => {
         _sp = spfi().using(SPFx(context)).using(PnPLogging(LogLevel.Warning));  
     }
   return _sp;
-};
+}

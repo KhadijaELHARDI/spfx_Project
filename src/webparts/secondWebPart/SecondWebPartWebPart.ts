@@ -36,7 +36,7 @@ export default class SecondWebPartWebPart extends BaseClientSideWebPart<ISecondW
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
         userDisplayName: this.context.pageContext.user.displayName,
-        spHttpClient: this.context.spHttpClient // Ajoutez spHttpClient ici
+        context:this.context,
       }
     );
 

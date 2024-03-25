@@ -11,10 +11,14 @@ import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import * as strings from 'FirstWebPartWebPartStrings';
 import FirstWebPart from './components/FirstWebPart';
 import { IFirstWebPartProps } from './components/IFirstWebPartProps';
+import { PropertyFieldPeoplePicker, PrincipalType } from '@pnp/spfx-property-controls/lib/PropertyFieldPeoplePicker';
+import { IPropertyFieldGroupOrPerson } from "@pnp/spfx-property-controls/lib/PropertyFieldPeoplePicker";
+
 
 export interface IFirstWebPartWebPartProps {
   description: string;
   list: string;
+  people: IPropertyFieldGroupOrPerson[];
 }
 
 export default class FirstWebPartWebPart extends BaseClientSideWebPart<IFirstWebPartWebPartProps> {
@@ -31,7 +35,8 @@ export default class FirstWebPartWebPart extends BaseClientSideWebPart<IFirstWeb
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
         userDisplayName: this.context.pageContext.user.displayName,
-        context: this.context
+        context: this.context,
+        people: this.properties.people,
       
       
       }
@@ -115,6 +120,17 @@ export default class FirstWebPartWebPart extends BaseClientSideWebPart<IFirstWeb
                 PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
                 }),
+                PropertyFieldPeoplePicker('people', {
+                  label: 'PropertyFieldPeoplePicker',
+                  initialData: this.properties.people,
+                  allowDuplicate: false,
+                  principalType: [PrincipalType.Users, PrincipalType.SharePoint, PrincipalType.Security],
+                  onPropertyChange: this.onPropertyPaneFieldChanged,
+                  context: this.context,
+                  properties: this.properties,
+                  deferredValidationTime: 0,
+                  key: 'peopleFieldId'
+                })
 
                
               ]

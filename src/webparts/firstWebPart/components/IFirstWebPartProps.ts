@@ -1,4 +1,5 @@
 import { WebPartContext } from "@microsoft/sp-webpart-base";
+import { IPropertyFieldGroupOrPerson } from "@pnp/spfx-property-controls";
 
 export interface IFirstWebPartProps {
   description: string;
@@ -7,5 +8,6 @@ export interface IFirstWebPartProps {
   hasTeamsContext: boolean;
   userDisplayName: string;
   context:WebPartContext;
+  people:IPropertyFieldGroupOrPerson[];
   
 }

@@ -4,24 +4,37 @@ import { IFirstWebPartProps } from './IFirstWebPartProps';
 import { ISTUDENT } from '../../../model/interfaces';
 import { getSP } from '../../../pnpjsConfig';
 import { getStudents } from '../../../service/listService';
+import { getCurrentUser } from '../../../service/listService';
 import { useEffect, useState } from 'react';
 import AddNewItemForm from './AddNewItemForm';
 import { Stack } from '@fluentui/react';
 import './StdStyles.css';
 
+
 const Std: React.FC<IFirstWebPartProps> = (props) => {
   const _sp: SPFI = getSP(props.context);
   const [stds, setStds] = useState<ISTUDENT[]>([]);
   const [showForm, setShowForm] = useState<boolean>(false);
+ 
+
+
 
   const getData = async () => {
     const stdData = await getStudents(_sp);
     setStds(stdData);
   };
+  
+  
+  
 
   useEffect(() => {
     getData();
-  }, []);
+
+    //const item=getCurrentUser(_sp);
+    //console.log(item)
+    //console.log(props.people)
+    fetchData();
+  }, [props.people]);
 
   const handleShowForm = () => {
     setShowForm(true);

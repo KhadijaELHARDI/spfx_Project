@@ -1,12 +1,11 @@
-import { spfi } from "@pnp/sp";
-import "@pnp/sp/webs";
+import "@pnp/sp";
 import "@pnp/sp/site-groups/web";
 import  { SiteGroup } from '../model/groupModel';
+import { SPFI } from "@pnp/sp";
 
-const sp = spfi(undefined);
 
 
-const getAllSiteGroups = async (): Promise<SiteGroup[]> => {
+const getAllSiteGroups = async (sp:SPFI): Promise<SiteGroup[]> => {
     try {
         const groups = await sp.web.siteGroups();
         return groups;
@@ -16,7 +15,7 @@ const getAllSiteGroups = async (): Promise<SiteGroup[]> => {
     }
 };
 
-const getAssociatedGroups = async (): Promise<{ visitorGroup: SiteGroup, memberGroup: SiteGroup, ownerGroup: SiteGroup }> => {
+const getAssociatedGroups = async (sp:SPFI): Promise<{ visitorGroup: SiteGroup, memberGroup: SiteGroup, ownerGroup: SiteGroup }> => {
     try {
         const visitorGroup = await sp.web.associatedVisitorGroup();
         const memberGroup = await sp.web.associatedMemberGroup();
@@ -28,7 +27,7 @@ const getAssociatedGroups = async (): Promise<{ visitorGroup: SiteGroup, memberG
     }
 };
 
-const createDefaultAssociatedGroups = async (ownerEmail: string, copyRoleAssignments: boolean, clearSubScopes: boolean): Promise<void> => {
+const createDefaultAssociatedGroups = async (sp:SPFI,ownerEmail: string, copyRoleAssignments: boolean, clearSubScopes: boolean): Promise<void> => {
     try {
         await sp.web.createDefaultAssociatedGroups(ownerEmail, copyRoleAssignments.toString(), clearSubScopes);
     } catch (error) {
@@ -38,16 +37,13 @@ const createDefaultAssociatedGroups = async (ownerEmail: string, copyRoleAssignm
 };
 
 
-const createNewSiteGroup = async (groupName: string): Promise<void> => {
-    try {
-        await sp.web.siteGroups.add({ "Title": groupName });
-    } catch (error) {
-        console.error('Erreur lors de la création d\'un nouveau groupe de site :', error);
-        throw error;
-    }
+const createNewSiteGroup = async (sp:SPFI,groupName: string, groupDescription:string): Promise<void> => {
+   console.log(groupName)       
+    await sp.web.siteGroups.add({ "Title": groupName ,"Description": groupDescription});
+    
 };
 
-const updateSiteGroup = async (groupId: number, updates: any): Promise<void> => {
+const updateSiteGroup = async (sp:SPFI,groupId: number, updates: any): Promise<void> => {
     try {
         await sp.web.siteGroups.getById(groupId).update(updates);
     } catch (error) {
@@ -56,7 +52,7 @@ const updateSiteGroup = async (groupId: number, updates: any): Promise<void> => 
     }
 };
 
-const deleteSiteGroupById = async (groupId: number): Promise<void> => {
+const deleteSiteGroupById = async (sp:SPFI,groupId: number): Promise<void> => {
     try {
         await sp.web.siteGroups.removeById(groupId);
     } catch (error) {
@@ -65,7 +61,7 @@ const deleteSiteGroupById = async (groupId: number): Promise<void> => {
     }
 };
 
-const deleteSiteGroupByName = async (groupName: string): Promise<void> => {
+const deleteSiteGroupByName = async (sp:SPFI,groupName: string): Promise<void> => {
     try {
         await sp.web.siteGroups.removeByLoginName(groupName);
     } catch (error) {
@@ -74,7 +70,7 @@ const deleteSiteGroupByName = async (groupName: string): Promise<void> => {
     }
 };
 
-const getAllUsersOfGroup = async (groupId: number): Promise<any[]> => {
+const getAllUsersOfGroup = async (sp:SPFI,groupId: number): Promise<any[]> => {
     try {
         const users = await sp.web.siteGroups.getById(groupId).users();
         return users;
@@ -84,7 +80,7 @@ const getAllUsersOfGroup = async (groupId: number): Promise<any[]> => {
     }
 };
 
-const updateOwnerOfGroup = async (groupId: number, ownerId: number): Promise<void> => {
+const updateOwnerOfGroup = async (sp:SPFI,groupId: number, ownerId: number): Promise<void> => {
     try {
         await sp.web.siteGroups.getById(groupId).setUserAsOwner(ownerId);
     } catch (error) {
