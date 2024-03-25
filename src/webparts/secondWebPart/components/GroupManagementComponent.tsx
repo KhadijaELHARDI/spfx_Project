@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { SPHttpClient} from '@microsoft/sp-http';
+import { SPHttpClient } from '@microsoft/sp-http';
 import { PrimaryButton, TextField, Stack } from '@fluentui/react';
-import { createNewSiteGroup } from '../../../service/groupService';  
+import { createNewSiteGroup } from '../../../service/groupService';
+
 interface IGroupManagementProps {
   spHttpClient: SPHttpClient;
+  // Inclure ISecondWebPartProps ici si nécessaire
 }
 
 const GroupManagement: React.FC<IGroupManagementProps> = ({ spHttpClient }) => {

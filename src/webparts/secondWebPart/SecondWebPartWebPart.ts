@@ -2,18 +2,24 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
 import {
-  type IPropertyPaneConfiguration,
+  BaseClientSideWebPart,
+  IPropertyPaneConfiguration,
   PropertyPaneTextField
-} from '@microsoft/sp-property-pane';
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
+} from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
-
 import * as strings from 'SecondWebPartWebPartStrings';
 import SecondWebPart from './components/SecondWebPart';
 import { ISecondWebPartProps } from './components/ISecondWebPartProps';
+import { SPHttpClient } from '@microsoft/sp-http';
 
 export interface ISecondWebPartWebPartProps {
   description: string;
+  isDarkTheme: boolean;
+  environmentMessage: string;
+  hasTeamsContext: boolean;
+  userDisplayName: string;
+  spHttpClient: SPHttpClient;
+  
 }
 
 export default class SecondWebPartWebPart extends BaseClientSideWebPart<ISecondWebPartWebPartProps> {
@@ -29,7 +35,8 @@ export default class SecondWebPartWebPart extends BaseClientSideWebPart<ISecondW
         isDarkTheme: this._isDarkTheme,
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName
+        userDisplayName: this.context.pageContext.user.displayName,
+        spHttpClient: this.context.spHttpClient // Ajoutez spHttpClient ici
       }
     );
 
@@ -41,8 +48,6 @@ export default class SecondWebPartWebPart extends BaseClientSideWebPart<ISecondW
       this._environmentMessage = message;
     });
   }
-
-
 
   private _getEnvironmentMessage(): Promise<string> {
     if (!!this.context.sdks.microsoftTeams) { // running in Teams, office.com or Outlook
@@ -63,11 +68,9 @@ export default class SecondWebPartWebPart extends BaseClientSideWebPart<ISecondW
             default:
               environmentMessage = strings.UnknownEnvironment;
           }
-
           return environmentMessage;
         });
     }
-
     return Promise.resolve(this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentSharePoint : strings.AppSharePointEnvironment);
   }
 
@@ -75,18 +78,15 @@ export default class SecondWebPartWebPart extends BaseClientSideWebPart<ISecondW
     if (!currentTheme) {
       return;
     }
-
     this._isDarkTheme = !!currentTheme.isInverted;
     const {
       semanticColors
     } = currentTheme;
-
     if (semanticColors) {
       this.domElement.style.setProperty('--bodyText', semanticColors.bodyText || null);
       this.domElement.style.setProperty('--link', semanticColors.link || null);
       this.domElement.style.setProperty('--linkHovered', semanticColors.linkHovered || null);
     }
-
   }
 
   protected onDispose(): void {
