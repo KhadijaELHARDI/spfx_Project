@@ -14,7 +14,10 @@ const getAllSiteGroups = async (sp:SPFI): Promise<SiteGroup[]> => {
         throw error;
     }
 };
-
+export const getNameSiteGroups = async (sp:SPFI,name:string): Promise<any[]> => {
+   const grp= await sp.web.siteGroups.getByName(name).users();
+     return grp;
+};
 const getAssociatedGroups = async (sp:SPFI): Promise<{ visitorGroup: SiteGroup, memberGroup: SiteGroup, ownerGroup: SiteGroup }> => {
     try {
         const visitorGroup = await sp.web.associatedVisitorGroup();
